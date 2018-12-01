@@ -1,7 +1,5 @@
 package jamesaldrin.reyes.com.reyes_jamesaldrin_exam2;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,27 +26,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void saveData(View v)
-    {
-        String FName = Fname.getText().toString();
-        String LName = Lname.getText().toString();
-        String EXam1 = Exam1.getText().toString();
-        String EXam2 = Exam2.getText().toString();
-        int Score1 = Integer.parseInt(EXam1);
-        int Score2 = Integer.parseInt(EXam2);
-        float average = (Score1 + Score2)/2;
-
-        String averagedisplay = Float.toString(average);
-
-        SharedPreferences sp = getSharedPreferences("Data1", MODE_PRIVATE);
-        SharedPreferences.Editor writer = sp.edit();
-        writer.putString("first", FName);
-        writer.putString("last", LName);
-        writer.putString ("average", averagedisplay);
-        writer.commit();
-        Toast.makeText(this, "Saved.", Toast.LENGTH_SHORT).show();
-    }
-
     public void saveExternal(View v)
     {
         File folder = getExternalFilesDir("TempFolder");
@@ -59,15 +36,15 @@ public class MainActivity extends AppCompatActivity {
         String EXam2 = Exam2.getText().toString();
         int Score1 = Integer.parseInt(EXam1);
         int Score2 = Integer.parseInt(EXam2);
-        float average = (Score1 + Score2)/2;
+        String average = (Score1 + Score2)/2 + "";
 
-        String averagedisplay = Float.toString(average);
+        //String averagedisplay = Float.toString(average);
         FileOutputStream fos = null;
         try {
             fos = openFileOutput("Data1.txt", MODE_PRIVATE);
             fos.write(FName.getBytes());
             fos.write(LName.getBytes());
-            fos.write(averagedisplay.getBytes());
+            fos.write(average.getBytes());
         } catch (Exception e) {
             Log.d("Error!", "Error!");
         }
@@ -94,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
             while((read = fis.read()) != -1)
             {
+                if(Character.isDigit((char)read))
                 buffer.append((char)read);
             }
             String averages = buffer + "!";
